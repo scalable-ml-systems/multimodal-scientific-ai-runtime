@@ -1,0 +1,84 @@
+############################################
+# General OS / Editor
+############################################
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+.idea/
+.vscode/
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+
+notes/
+
+############################################
+# Python (Services, Actors, Tooling)
+############################################
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+dist/
+build/
+.wheels/
+.pytest_cache/
+.mypy_cache/
+.pytype/
+.coverage
+htmlcov/
+.coverage.*
+.cache/
+.env
+.env.*
+
+############################################
+# Virtual Environments
+############################################
+.venv/
+venv/
+env/
+
+############################################
+# Terraform (IaC)
+############################################
+**/.terraform/
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+terraform.tfvars
+terraform.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+############################################
+# Kubernetes / Helm
+############################################
+charts/**/charts/
+charts/**/tmp/
+charts/**/.helmignore
+*.tgz
+helmfile.lock
+
+############################################
+# Argo CD / GitOps
+############################################
+.argocd/
+argocd-local/
+
+############################################
+# Kafka / Streaming
+############################################
+*.kafka.log
+.kafka/
+

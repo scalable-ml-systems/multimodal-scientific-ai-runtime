@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/tool-io/ToolInvocation.schema.json",
+  "title": "ToolInvocation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tool", "inputs", "parameters"],
+  "properties": {
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 0,
+      "items": { "$ref": "https://example.org/schemas/control-plane/Shared.schema.json#/definitions/ArtifactRef" }
+    },
+    "parameters": { "type": "object", "additionalProperties": true }
+  }
+}

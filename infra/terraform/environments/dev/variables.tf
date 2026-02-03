@@ -10,7 +10,12 @@ variable "env" {
 
 variable "owner" {
   type    = string
-  default = "your-name"
+  default = "nb"
+}
+
+variable "cost_center" {
+  type    = string
+  default = "nb-cost"
 }
 
 variable "region" {
@@ -30,12 +35,17 @@ variable "az_count" {
 
 variable "one_nat_gateway" {
   type    = bool
-  default = true
+  default = false
+}
+
+variable "enable_nat_gateway" {
+  type    = bool
+  default = false
 }
 
 variable "cluster_name" {
   type    = string
-  default = "ecr-platform-dev"
+  default = "AI-scientific-platform-dev"
 }
 
 variable "kubernetes_version" {

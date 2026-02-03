@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/tool-io/ToolResult.schema.json",
+  "title": "ToolResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "outputs"],
+  "properties": {
+    "status": { "type": "string", "enum": ["SUCCEEDED", "FAILED"] },
+    "outputs": {
+      "type": "array",
+      "items": { "$ref": "https://example.org/schemas/control-plane/Shared.schema.json#/definitions/ArtifactRef" }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": { "type": ["number", "string", "boolean"] }
+    },
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string" },
+        "message": { "type": "string" }
+      }
+    }
+  }
+}

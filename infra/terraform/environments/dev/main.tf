@@ -4,11 +4,12 @@ locals {
 
 # 1) VPC + NAT
 module "network_vpc" {
-  source          = "../../modules/network-vpc"
-  name            = local.name
-  cidr            = var.vpc_cidr
-  az_count        = var.az_count
-  one_nat_gateway = var.one_nat_gateway
+  source             = "../../modules/network-vpc"
+  name               = local.name
+  cidr               = var.vpc_cidr
+  az_count           = var.az_count
+  enable_nat_gateway = var.enable_nat_gateway
+  one_nat_gateway    = var.one_nat_gateway
 }
 
 # 2) EKS + nodegroups
@@ -18,7 +19,7 @@ module "cluster_eks" {
   kubernetes_version = var.kubernetes_version
 
   vpc_id          = module.network_vpc.vpc_id
-  private_subnets = module.network_vpc.private_subnet_ids
+  private_subnets = module.network_vpc.public_subnet_ids
 
   system_instance_type = var.system_instance_type
   system_min           = var.system_min

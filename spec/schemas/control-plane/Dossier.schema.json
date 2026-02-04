@@ -1,36 +1,37 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.org/schemas/control-plane/Dossier.schema.json",
-  "title": "Dossier",
-  "type": "object",
-  "additionalProperties": false,
-  "required": ["api_version", "run_id", "created_at", "evidence_index"],
-  "properties": {
-    "api_version": { "type": "string", "const": "v1" },
-    "run_id": { "type": "string" },
-    "created_at": { "type": "string", "format": "date-time" },
-    "summary": { "type": "string" },
-    "key_findings": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "evidence_index": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["kind", "ref"],
-        "properties": {
-          "kind": { "type": "string", "enum": ["StepResult", "Artifact"] },
-          "ref": { "type": "string", "description": "URI or ID reference" },
-          "note": { "type": "string" }
-        }
-      }
-    },
-    "output_artifacts": {
-      "type": "array",
-      "items": { "$ref": "https://example.org/schemas/control-plane/Shared.schema.json#/definitions/ArtifactRef" }
+  "schema_version": "v1",
+  "correlation_id": {
+    "correlation_id": "corr-12345678"
+  },
+  "run_id": "run-abcdef01",
+  "created_at": "2026-02-04T03:45:00Z",
+
+  "research_only_disclaimer": "This dossier is for research purposes only and does not constitute clinical or therapeutic advice.",
+
+  "summary": "The system generated candidate structures, scored them, and verified results under research-only constraints.",
+
+  "provenance": {
+    "workflow_template": "v1_generate_score_verify",
+    "workflow_version": "v1",
+    "tool_bindings": {
+      "generator": "vllm:mistral-7b",
+      "scoring": "triton:scoring-model-v1",
+      "verifier": "policy-verifier:v1"
     }
-  }
+  },
+
+  "step_artifacts": [
+    {
+      "uri": "s3://example-bucket/artifacts/generate/output.json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "content_type": "application/json",
+      "bytes": 2048
+    },
+    {
+      "uri": "s3://example-bucket/artifacts/score/output.json",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "content_type": "application/json",
+      "bytes": 4096
+    }
+  ]
 }

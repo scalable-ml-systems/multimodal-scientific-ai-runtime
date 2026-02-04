@@ -1,65 +1,32 @@
-api_version: v1
-kind: WorkflowTemplate
-metadata:
-  name: example-multimodal-scientific-run
-  version: "0.1.0"
-  description: >
-    Contracts-first DAG template. This is declarative and compileable into a RunManifest.
-dag:
-  steps:
-    - id: ingest
-      name: Ingest inputs
-      tool:
-        name: tool.ingest
-        version: "1.0.0"
-        io_schema_ref: spec/schemas/tool-io/ToolInvocation.schema.json
-      inputs:
-        - name: raw_input_1
-          from_request_input: "sample_0"   # name in ExperimentRequest.inputs[*].name
-      outputs:
-        - name: normalized_dataset
-          content_type: application/x-parquet
-      parameters:
-        normalize: true
+schema_version: v1
+template_id: v1_generate_score_verify
+description: "Generate candidates, score them, verify, then produce a dossier."
 
-    - id: analyze
-      name: Analyze dataset
-      depends_on: [ingest]
-      tool:
-        name: tool.analysis
-        version: "1.0.0"
-        io_schema_ref: spec/schemas/tool-io/ToolInvocation.schema.json
-      inputs:
-        - name: normalized_dataset
-          from_step_output:
-            step_id: ingest
-            output_name: normalized_dataset
-      outputs:
-        - name: analysis_report
-          content_type: text/markdown
-      parameters:
-        method: "baseline-stats"
+inputs:
+  required:
+    - primary_artifacts
 
-    - id: summarize
-      name: Summarize findings
-      depends_on: [analyze]
-      tool:
-        name: tool.summarize
-        version: "1.0.0"
-        io_schema_ref: spec/schemas/tool-io/ToolInvocation.schema.json
-      inputs:
-        - name: analysis_report
-          from_step_output:
-            step_id: analyze
-            output_name: analysis_report
-      outputs:
-        - name: dossier_summary
-          content_type: text/markdown
-      parameters:
-        style: "scientific"
-compile_rules:
-  # compilation rules are part of the template format so behavior is explicit
-  artifact_root_pattern: "s3://<artifact-bucket>/runs/<run_id>/"
-  step_result_naming: "<run_id>/<step_id>/step_result.json"
-  enforce_content_type: true
-  enforce_schema_validation: true
+steps:
+  - id: generate
+    type: generator
+    tool: generator
+    depends_on: []
+    input_mapping:
+      prompt_from: inputs.free_text_context
+
+  - id: score
+    type: scoring
+    tool: scoring
+    depends_on: [generate]
+    input_mapping:
+      candidates_from: steps.generate.output.candidates
+
+  - id: verify
+    type: verifier
+    tool: verifier
+    depends_on: [score]
+    input_mapping:
+      step_results_from: steps
+
+outputs:
+  dossier_from: steps.verify.output.dossier
